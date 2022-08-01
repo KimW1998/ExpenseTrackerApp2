@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import Input from "./Input";
 import Button from "../UI/Button";
 import { getFormattedDate } from "../../util/date";
 
-function ExpenseForm({onCancel, onSubmit, submitButtonLabel, defaultValues}) {
+function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
   const [inputValues, setInputValues] = useState({
-    amount: defaultValues ? defaultValues.amount.toString() : '',
-    date: defaultValues ? getFormattedDate(defaultValues.date) : '',
-    description: defaultValues ? defaultValues.description : '',
+    amount: defaultValues ? defaultValues.amount.toString() : "",
+    date: defaultValues ? getFormattedDate(defaultValues.date) : "",
+    description: defaultValues ? defaultValues.description : "",
   });
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
@@ -22,10 +22,21 @@ function ExpenseForm({onCancel, onSubmit, submitButtonLabel, defaultValues}) {
 
   function submitHandler() {
     const expenseData = {
-        amount: +inputValues.amount,
-        date: new Date(inputValues.date),
-        description: inputValues.description,
+      amount: +inputValues.amount,
+      date: new Date(inputValues.date),
+      description: inputValues.description,
+    };
+
+    const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
+    const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+    const descriptionIsValid = expenseData.description.trim().length > 0;
+
+    if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+        Alert.alert('Invalid Input', 'Please check your input values' )
+        return;
+
     }
+
     onSubmit(expenseData);
   }
 
@@ -38,7 +49,7 @@ function ExpenseForm({onCancel, onSubmit, submitButtonLabel, defaultValues}) {
           label="Amount"
           TextInputConfig={{
             keyboardType: "decimal-pad",
-            onChangeText: inputChangedHandler.bind(this, 'amount'),
+            onChangeText: inputChangedHandler.bind(this, "amount"),
             value: inputValues.amount,
           }}
         />
@@ -48,7 +59,7 @@ function ExpenseForm({onCancel, onSubmit, submitButtonLabel, defaultValues}) {
           TextInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            onChangeText: inputChangedHandler.bind(this, 'date'),
+            onChangeText: inputChangedHandler.bind(this, "date"),
             value: inputValues.date,
           }}
         />
@@ -58,7 +69,7 @@ function ExpenseForm({onCancel, onSubmit, submitButtonLabel, defaultValues}) {
           label="Description"
           TextInputConfig={{
             multiline: true,
-            onChangeText: inputChangedHandler.bind(this, 'description'),
+            onChangeText: inputChangedHandler.bind(this, "description"),
             value: inputValues.description,
           }}
         />
@@ -96,9 +107,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     minWidth: 120,
