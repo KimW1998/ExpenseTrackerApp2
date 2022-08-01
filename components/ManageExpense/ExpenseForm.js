@@ -1,19 +1,34 @@
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Input from "./Input";
 
 function ExpenseForm() {
-  function amountChangedHandler() {}
+  const [inputValues, setInputValues] = useState({
+    amount: "",
+    date: "",
+    description: "",
+  });
+
+  function inputChangedHandler(inputIdentifier, enteredValue) {
+    setInputValues((currentInputValue) => {
+      return {
+        ...currentInputValue,
+        [inputIdentifier]: enteredValue,
+      };
+    });
+  }
 
   return (
     <View style={styles.form}>
-        <Text style={styles.title}>Your Expense</Text>
+      <Text style={styles.title}>Your Expense</Text>
       <View style={styles.inputsRow}>
         <Input
           style={styles.rowInput}
           label="Amount"
           TextInputConfig={{
             keyboardType: "decimal-pad",
-            onChangeText: amountChangedHandler,
+            onChangeText: inputChangedHandler.bind(this, 'amount'),
+            value: inputValues.amount,
           }}
         />
         <Input
@@ -22,7 +37,8 @@ function ExpenseForm() {
           TextInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            onChangeText: () => {},
+            onChangeText: inputChangedHandler.bind(this, 'date'),
+            value: inputValues.date,
           }}
         />
       </View>
@@ -31,6 +47,8 @@ function ExpenseForm() {
           label="Description"
           TextInputConfig={{
             multiline: true,
+            onChangeText: inputChangedHandler.bind(this, 'description'),
+            value: inputValues.description,
           }}
         />
       </View>
@@ -41,16 +59,16 @@ function ExpenseForm() {
 export default ExpenseForm;
 
 const styles = StyleSheet.create({
-    form: {
-        marginTop: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "white",
-        marginVertical: 24,
-        textAlign: 'center',
-    },
+  form: {
+    marginTop: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    marginVertical: 24,
+    textAlign: "center",
+  },
   inputsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
