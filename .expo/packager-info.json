@@ -1,4 +1,9 @@
 {
   "expoServerPort": 19000,
-  "packagerPort": 19000
+  "packagerPort": 19000,
+  "packagerPid": null,
+  "expoServerNgrokUrl": "https://t8-h9w.slimmemik.expensetrackerapp2.exp.direct",
+  "packagerNgrokUrl": "https://t8-h9w.slimmemik.expensetrackerapp2.exp.direct",
+  "ngrokPid": 7520,
+  "webpackServerPort": null
 }
